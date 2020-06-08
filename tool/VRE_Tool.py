@@ -30,7 +30,7 @@ class WF_RUNNER(Tool):
     """
     MASKED_KEYS = {'execution', 'project', 'confidence_level', 'minsize',
         'efilter', 'top_n'}  # arguments from config.json
-    R_SCRIPT_PATH = "/home/user/vre_template_tool/tests/basic/"
+    R_SCRIPT_PATH = "/home/user/vre_dorothea_executor/tests/basic/"
     debug_mode = True # If True debug mode is on, False otherwise
 
     def __init__(self, configuration=None):
