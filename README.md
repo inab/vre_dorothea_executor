@@ -1,28 +1,21 @@
-# VRE Carnival tool
+# iPC VRE Dorothea Executor
 
-Simple example Carnival tool that is ready to run in the VRE.
+Example pipelines file that is ready to run in the VRE matching the code in the HowTo documentation.
+
+This repo structure dorothea and tools can be forked and used as the base template for new tools and dorothea. It should have all of the base functionality and is set up for unit testing and with pylint to ensure code clarity.
 
 ## Requirements
 
-- Python 3.6 or +x
-- Python3.6-pip, Python3.6-dev and Python3.6-venv or +
-- Git
-- Docker
-
+- Python 3.6 or later (Recommended 3.7)
+- Python3.6-pip, Python3.6-dev and Python3.6-venv or later
+- R-4.0
 
 ```bash
 sudo apt update
 sudo apt install python3.6 
-sudo apt install python3.6-pip python3.6-dev  python3.6-venv
-sudo apt install git
-sudo apt install docker-ce
+sudo apt install python3.6-pip python3.6-dev python3.6-venv
+sudo apt install r-base
 ```
-
-Remember to add your username to the `docker` group.
-
- ```bash
- sudo usermod -a -G docker $USER
- ```
 
 ## Installation
 
@@ -31,54 +24,20 @@ Directly from GitHub:
 ```bash
 cd $HOME
 
-git clone https://github.com/inab/vre_template_tool.git
+git clone https://github.com/inab/vre_dorothea_executor.git
 
-cd vre_template_tool
+cd vre_dorothea_executor
 ```
 
 Create the Python environment:
 
 ```bash
-python3 -m venv $HOME/vre_template_tool/venv
+python3 -m venv $HOME/vre_dorothea_executor/venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Configuration
-
-Change user with your username in `tests/basic/config.json`:
-
-```json 
-"arguments": [
-  {
-      "name": "execution",
-      "value": "/home/user/vre_template_tool/tests/basic/run000"
-  }
-],
-"output_files": [
-  {
-      "name": "bam_file",
-      "required": true,
-      "allow_multiple": false,
-      "file": {
-          "file_path": "/home/user/vre_template_tool/tests/basic/run000/A.bam"
-      }
-   }
-]
-```
-and `tests/basic/in_metadata.json`:
-
-```json 
-{
-    "_id": "unique_file_id_5e14abe0a37012.29503907",
-    "file_path": "/home/user/vre_template_tool/tests/basic/NA12878.bam"
-},
-{
-    "_id": "unique_file_id_5e14abe0a37012.29503908",
-    "file_path": "/home/user/vre_template_tool/tests/basic/hg38.fa"
-{
-``` 
-## Run the example
+## Run the Wrapper
 ```bash
 ./VRE_RUNNER --config tests/basic/config.json --in_metadata tests/basic/in_metadata.json --out_metadata out_metadata.json --log_file VRE_RUNNER.log
 ```
