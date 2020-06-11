@@ -21,23 +21,24 @@ import time
 
 from basic_modules.tool import Tool
 from utils import logger
-from lib.tool_methods import Template
+from lib.dorothea import Dorothea
 
 
 class WF_RUNNER(Tool):
     """
-    Template for writing to a file
+    This is a class for Dorothea Tool module.
     """
-    MASKED_KEYS = {'execution', 'project', 'confidence_level', 'minsize',
-        'efilter', 'top_n'}  # arguments from config.json
-    R_SCRIPT_PATH = "/home/user/vre_dorothea_executor/tests/basic/"
-    debug_mode = True # If True debug mode is on, False otherwise
+
+    MASKED_KEYS = {'execution', 'project', 'confidence_level', 'minsize', 'efilter',
+                   'top_n'}  # arguments from config.json
+    R_SCRIPT_PATH = "/Users/laurarodrigueznavas/PycharmProjects/vre_dorothea_executor/tests/basic/run_dorothea.r"
+    debug_mode = True  # If True debug mode is on, False otherwise
 
     def __init__(self, configuration=None):
         """
         Init function
         """
-        logger.debug("VRE Template Workflow runner")
+        logger.debug("VRE Dorothea runner")
         Tool.__init__(self)
 
         if configuration is None:
@@ -50,22 +51,20 @@ class WF_RUNNER(Tool):
             if isinstance(v, list):
                 self.configuration[k] = ' '.join(v)
 
-        self.outputs = {} # TODO
+        self.outputs = dict()
         self.execution_path = None
 
     def execute_dorothea(self, input_files, arguments):  # pylint: disable=no-self-use
         """
-        The main function to run the remote Template workflow
+        The main function to run the remote Dorothea
 
         param input_files: List of input files - In this case there are no input files required.
         :type input_files: dict
         :param arguments: dict containing tool arguments
         :type arguments: dict
-        :param working_directory: Execution working path directory
-        :type working_directory: str
         """
         try:
-            logger.debug("Getting the CSV file")
+            logger.debug("Getting the CSV input file")
             csv_input_path = input_files["input_reads"]
 
             if csv_input_path is None:
@@ -73,10 +72,10 @@ class WF_RUNNER(Tool):
                 logger.fatal(errstr)
                 raise Exception(errstr)
 
-            # Template execution
-            process = Template.execute_tool(csv_input_path, arguments, self.R_SCRIPT_PATH)
+            # Dorothea execution
+            process = Dorothea.execute_dorothea_rscript(csv_input_path, arguments, self.R_SCRIPT_PATH)
 
-            # Sending the cwltool execution stdout to the log file
+            # Sending the Dorothea execution stdout to the log file
             for line in iter(process.stderr.readline, b''):
                 print(line.rstrip().decode("utf-8").replace("", " "))
 
@@ -97,7 +96,6 @@ class WF_RUNNER(Tool):
             logger.error(errstr)
             raise Exception(errstr)
 
-
     def run(self, input_files, input_metadata, output_files, output_metadata):
         """
         The main function to run the compute_metrics tool.
@@ -115,14 +113,15 @@ class WF_RUNNER(Tool):
         :rtype: dict, dict
         """
         try:
+
             # Set and validate execution directory. If not exists the directory will be created.
             execution_path = os.path.abspath(self.configuration.get('execution', '.'))
-            self.execution_path = execution_path
+            self.execution_path = execution_path    # save execution path
             if not os.path.isdir(execution_path):
                 os.makedirs(execution_path)
 
+            # Set and validate execution parent directory. If not exists the directory will be created.
             execution_parent_dir = os.path.dirname(execution_path)
-
             if not os.path.isdir(execution_parent_dir):
                 os.makedirs(execution_parent_dir)
 
@@ -130,19 +129,17 @@ class WF_RUNNER(Tool):
             os.chdir(execution_path)
             logger.debug("Execution path: {}".format(execution_path))
 
-            logger.debug("Init execution of the Template Workflow")
+            logger.debug("Init Dorothea execution")
             self.execute_dorothea(input_files, self.configuration)
-
 
             # Create and validate the output files
             self.create_output_files(output_files, output_metadata)
             logger.debug("Output files and output metadata created")
-            print(output_files, output_metadata)
 
             return output_files, output_metadata
 
         except:
-            errstr = "VRE Template RUNNER pipeline failed. See logs"
+            errstr = "VRE Dorothea RUNNER pipeline failed. See logs"
             logger.fatal(errstr)
             raise Exception(errstr)
 
@@ -158,29 +155,24 @@ class WF_RUNNER(Tool):
         (output_metadata).
         :rtype: dict, dict
         """
-        # TODO much control
-        confidence_level = self.configuration.get('confidence_level', '.')
-        top_n = self.configuration.get('top_n', '.')
         try:
+            confidence_level = self.configuration.get('confidence_level', '.')
+            top_n = self.configuration.get('top_n', '.')
+
             for metadata in output_metadata:  # for each output file in output_metadata
                 out_id = metadata["name"]
                 pop_output_path = list()  # list of tuples (path, type of output)
-                if out_id in output_files.keys():  # output id in metadata in output id outputs_exec
+                if out_id in output_files.keys():  # out_id in metadata
                     if out_id == "dorothea_scores":
                         file_path = self.execution_path + "/" + out_id + "_" + confidence_level.replace(',', '') + ".csv"
-
                     else:
                         file_path = self.execution_path + "/" + out_id + "_" + str(top_n) + ".png"
 
-                    print(file_path)
-
                     file_type = "file"
-                    pop_output_path.append((file_path, file_type))
-                    print(pop_output_path)
+                    pop_output_path.append((file_path, file_type))  # add file_path and file_type
 
                     output_files[out_id] = pop_output_path  # create output files
                     self.outputs[out_id] = pop_output_path  # save output files
-                    print(output_files)
 
         except:
             errstr = "Output files not created. See logs"

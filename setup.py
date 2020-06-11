@@ -18,7 +18,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='vre_template_tool',
+    name='vre_dorothea_executor',
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
