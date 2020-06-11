@@ -1,6 +1,3 @@
-ruamel.yaml<=0.16.5,>=0.12.4
-wheel
 pylint
 pytest
-cwltool<=2.0.20200312183052
 git+https://github.com/inab/openvre-tool-api.git
