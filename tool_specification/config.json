@@ -1,0 +1,68 @@
+{
+    "input_files": [
+        {
+            "name": "input_reads",
+            "value": "unique_file_id_5ee3639521bd65.65521556",
+            "required": true,
+            "allow_multiple": false
+        }
+    ],
+    "arguments": [
+        {
+            "name": "execution",
+            "value": "/test/execution/directory"
+        },
+        {
+            "name": "project",
+            "value": "my_project_id"
+        },
+        {
+            "name": "confidence_level",
+            "value": [
+                "A",
+                "B",
+                "C"
+            ]
+        },
+        {
+            "name": "minsize",
+            "value": 16
+        },
+        {
+            "name": "efilter",
+            "value": "F"
+        },
+        {
+            "name": "top_n",
+            "value": 29
+        }
+    ],
+    "output_files": [
+        {
+            "name": "dorothea_scores",
+            "required": true,
+            "allow_multiple": false,
+            "file": {
+                "file_type": "CSV",
+                "data_type": "dorothea_scores",
+                "meta_data": {
+                    "visible": true,
+                    "description": "D"
+                }
+            }
+        },
+        {
+            "name": "topN",
+            "required": true,
+            "allow_multiple": false,
+            "file": {
+                "file_type": "TAR",
+                "data_type": "tool_statistics",
+                "meta_data": {
+                    "visible": true,
+                    "description": "D"
+                }
+            }
+        }
+    ]
+}
