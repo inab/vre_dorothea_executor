@@ -1,0 +1,143 @@
+{
+    "_id": "dorothea",
+    "name": "My Tool",
+    "title": "My tool Complete Name",
+    "short_description": "This is a one or two lines description of what 'My Tool' does. You can leave a dummy text for the moment!",
+    "long_description": "This is a longer description of what 'My Tool' does. It includes information about the software use for it, the supported inputs, the expected results, etc. You can leave a dummy text for the moment!",
+    "url": "http:\/\/gitbub.com\/MyTool",
+    "publication": "00.0000\/nar\/gks000",
+    "owner": {
+        "author": "My Name",
+        "institution": "My University",
+        "contact": "myEmail@uni.cat",
+        "url": "https:\/\/MyUniversity.uni.cat\/MyGroup"
+    },
+    "keywords": [
+        "DNA"
+    ],
+    "keywords_tool": [
+        "whatever",
+        "keyword"
+    ],
+    "infrastructure": {
+        "memory": 12,
+        "cpus": 4,
+        "executable": "\/VM\/path\/where\/main\/executable\/is\/going\/to\/be\/MyTool.py",
+        "clouds": {
+            "mug-irb": {
+                "launcher": "PMES",
+                "workflowType": "COMPSs",
+                "minimumVMs": 1,
+                "initialVMs": 1,
+                "default_cloud": true
+            }
+        }
+    },
+    "input_files": [
+        {
+            "name": "input_reads",
+            "description": "Dorothea Example File",
+            "help": "Some explanation about Dorothea Example File displayed to user in help tooltips ",
+            "file_type": [
+                "CSV"
+            ],
+            "data_type": [
+                "expression_profile"
+            ],
+            "required": true,
+            "allow_multiple": false
+        }
+    ],
+    "input_files_public_dir": [],
+    "input_files_combinations": [
+        {
+            "description": "Analyse a single CSV",
+            "input_files": [
+                "input_reads"
+            ]
+        }
+    ],
+    "arguments": [
+        {
+            "name": "confidence_level",
+            "description": "Confidence Level",
+            "help": "Some explanation about Confidence Level displayed to user in help tooltips",
+            "type": "enum_multiple",
+            "enum_items": {
+                "description": [
+                    "A",
+                    "B",
+                    "C"
+                ],
+                "name": [
+                    "A",
+                    "B",
+                    "C"
+                ]
+            },
+            "default": [
+                "A,B,C"
+            ]
+        },
+        {
+            "name": "minsize",
+            "description": "Min Size",
+            "help": "Some explanation about Min Size displayed to user in help tooltips",
+            "type": "integer",
+            "default": 5
+        },
+        {
+            "name": "efilter",
+            "description": "efilter",
+            "help": "Some explanation about efilter displayed to user in help tooltips",
+            "type": "enum",
+            "enum_items": {
+                "description": [
+                    "FALSE",
+                    "TRUE"
+                ],
+                "name": [
+                    "F",
+                    "T"
+                ]
+            },
+            "default": "F"
+        },
+        {
+            "name": "top_n",
+            "description": "top_n",
+            "help": "Some explanation about top_n displayed to user in help tooltips",
+            "type": "integer",
+            "default": 25
+        }
+    ],
+    "has_custom_viewer": true,
+    "output_files": [
+        {
+            "name": "dorothea_scores",
+            "required": true,
+            "allow_multiple": false,
+            "file": {
+                "file_type": "CSV",
+                "data_type": "dorothea_scores",
+                "meta_data": {
+                    "visible": true,
+                    "description": "D"
+                }
+            }
+        },
+        {
+            "name": "topN",
+            "required": true,
+            "allow_multiple": false,
+            "file": {
+                "file_type": "TAR",
+                "data_type": "tool_statistics",
+                "meta_data": {
+                    "visible": true,
+                    "description": "D"
+                }
+            }
+        }
+    ]
+}

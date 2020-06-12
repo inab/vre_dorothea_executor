@@ -18,5 +18,3 @@ dist/
 build/
 *.log
 .idea
-*config.json
-*in_metadata.json
