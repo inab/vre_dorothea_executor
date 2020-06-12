@@ -1,40 +1,56 @@
 {
+    "_id": "dorothea",
     "input_files": [
         {
             "name": "input_reads",
-            "value": "unique_file_id_5ee3639521bd65.65521556",
+            "description": "Gene expression matrix with genes (HGNC/MGI symbols) in rows and samples in columns.",
+            "help": "The object can be a simple matrix/data frame or complexer objects such as ExpressionSet Seurat or SingleCellExperiment objects.",
+            "file_type": [
+                "CSV"
+            ],
+            "data_type": [
+                "expression_profile"
+            ],
             "required": true,
             "allow_multiple": false
         }
     ],
+    "input_files_public_dir": [],
+    "input_files_combinations": [
+        {
+            "description": "Gene expression matrix with genes (HGNC/MGI symbols) in rows and samples in columns.",
+            "input_files": [
+                "input_reads"
+            ]
+        }
+    ],
     "arguments": [
         {
-            "name": "execution",
-            "value": "/test/execution/directory"
-        },
-        {
-            "name": "project",
-            "value": "my_project_id"
-        },
-        {
             "name": "confidence_level",
-            "value": [
-                "A",
-                "B",
-                "C"
+            "description": "Confidence level based on the number of supporting evidence.",
+            "help": "The confidence assigment comprises five levels, ranging from A (highest confidence) to E (lowest confidence).",
+            "type": "enum_multiple",
+            "enum_items": {
+                "description": ["A", "B", "C", "D", "E"],
+                "name": ["A", "B", "C", "D", "E"]
+            },
+            "default": [
+                "A,B,C"
             ]
         },
         {
             "name": "minsize",
-            "value": 16
-        },
-        {
-            "name": "efilter",
-            "value": "F"
+            "description": "Minimal number of genes in regulons.",
+            "help": "Number of genes targeted by a specific transcription factor.",
+            "type": "integer",
+            "default": 5
         },
         {
             "name": "top_n",
-            "value": 29
+            "description": "Number of transcription factors to display in bar plots",
+            "help": "The normalized enrichment scores (NES) of the top N transcription factors will be displayed in the bar plot",
+            "type": "integer",
+            "default": 25
         }
     ],
     "output_files": [
@@ -47,7 +63,7 @@
                 "data_type": "dorothea_scores",
                 "meta_data": {
                     "visible": true,
-                    "description": "D"
+                    "description": "Normalized enrichment scores for Transciption Factors"
                 }
             }
         },
@@ -60,7 +76,7 @@
                 "data_type": "tool_statistics",
                 "meta_data": {
                     "visible": true,
-                    "description": "D"
+                    "description": "Plots"
                 }
             }
         }
