@@ -14,7 +14,8 @@ method = "scale"
 if (dorothea_file == "dorothea_example.csv"){ method = "none" }
 
 writeLines("Creating output file names")
-file_csv = paste0("dorothea_scores_",  paste0(confidence_level, collapse = ""), ".csv")
+dir.create("results", recursive = T)
+file_csv = paste0("results/dorothea_scores_",  paste0(confidence_level, collapse = ""), ".csv")
 
 writeLines("Reading files")
 dorothea_matrix <- as.matrix(read.csv(dorothea_file, row.names = 1))
@@ -42,7 +43,6 @@ tf_activities_stat <- tf_activities_stat %>%
   rownames_to_column(var = "GeneID")
 
 for(i in condition){
-  file_png = paste0("top_", as.character(top_n), "_", i, ".png")
 
   aux <- tf_activities_stat[, c("GeneID", i)] %>%
     dplyr::rename(NES = "t") %>%
@@ -64,6 +64,8 @@ for(i in condition){
     xlab("Transcription Factors") +
     ylab("Normalized Enrichment scores (NES)")
 
+  dir.create(paste0("results/", i), recursive = T)
+  file_png = file.path("results", i, paste0("top_", as.character(top_n), "_", i, ".png"))
   ggsave(filename = file_png, plot = topN_barplot)
 
 }
