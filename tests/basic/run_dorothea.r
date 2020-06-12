@@ -3,7 +3,7 @@ library(dplyr)
 library(tibble)
 library(ggplot2)
 
-# read arguments
+writeLines("Reading arguments")
 args = commandArgs(trailingOnly = TRUE)
 dorothea_file = args[1]
 confidence_level = unlist(strsplit(args[2], ","))
@@ -11,14 +11,14 @@ minsize = as.numeric(args[3])
 efilter = as.logical(args[4])
 topN = as.numeric(args[5])
 
-# output files names
+writeLines("Creating output file names")
 file_csv = paste0("dorothea_scores_",  paste0(confidence_level, collapse = ""), ".csv")
 file_png = paste0("top_", as.character(top_n), ".png")
 
-# read file to calculate dorothea
+writeLines("Reading files")
 dorothea_matrix <- as.matrix(read.csv(dorothea_file, row.names = 1))
 
-# Calculate dorothea
+writeLines("Calculating dorothea")
 data(dorothea_hs, package = "dorothea")
 regulons <- dorothea_hs %>%
   dplyr::filter(confidence %in% confidence_level)
@@ -33,7 +33,7 @@ write.csv(tf_activities_stat, file_csv, quote=F)
 conditions = colnames(tf_activities_stat)
 
 # Top N TFs based on the normalized enrichment scores in a bar plot per sample
-
+writeLines("Creating bar plot for all conditions")
 tf_activities_stat <- tf_activities_stat %>%
   as.data.frame() %>%
   rownames_to_column(var = "GeneID")
@@ -63,3 +63,5 @@ for(i in condition){
   ggsave(filename = file_png, plot = topN_barplot)
 
 }
+
+writeLines("Finished")
