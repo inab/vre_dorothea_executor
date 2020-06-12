@@ -10,10 +10,12 @@ confidence_level = unlist(strsplit(args[2], ","))
 minsize = as.numeric(args[3])
 efilter = as.logical(args[4])
 topN = as.numeric(args[5])
+method = "scale"
+
+if (dorothea_file == "dorothea_example.csv"){ method = "none" }
 
 writeLines("Creating output file names")
 file_csv = paste0("dorothea_scores_",  paste0(confidence_level, collapse = ""), ".csv")
-file_png = paste0("top_", as.character(top_n), ".png")
 
 writeLines("Reading files")
 dorothea_matrix <- as.matrix(read.csv(dorothea_file, row.names = 1))
@@ -24,8 +26,10 @@ regulons <- dorothea_hs %>%
   dplyr::filter(confidence %in% confidence_level)
 
 tf_activities_stat <- dorothea::run_viper(dorothea_matrix, regulons,
-                                          options =  list(minsize = minsize, eset.filter = efilter,
-                                          cores = 1, verbose = FALSE, nes = TRUE))
+                                          options =  list(minsize = minsize,
+                                            eset.filter = efilter,
+                                            cores = 1, method = method, 
+                                            verbose = FALSE, nes = TRUE))
 
 write.csv(tf_activities_stat, file_csv, quote=F)
 
@@ -39,6 +43,7 @@ tf_activities_stat <- tf_activities_stat %>%
   rownames_to_column(var = "GeneID")
 
 for(i in condition){
+  file_png = paste0("top_", as.character(top_n), "_", i, ".png")
 
   aux <- tf_activities_stat[, c("GeneID", i)] %>%
     dplyr::rename(NES = "t") %>%
