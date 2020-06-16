@@ -30,7 +30,7 @@ class WF_RUNNER(Tool):
     """
 
     MASKED_KEYS = {'execution', 'project', 'confidence_level', 'minsize', 'top_n'}  # arguments from config.json
-    R_SCRIPT_PATH = "/Users/laurarodrigueznavas/PycharmProjects/vre_dorothea_executor/tests/basic/run_dorothea.r"
+    R_SCRIPT_PATH = "/home/user/vre_dorothea_executor/tests/basic/run_dorothea.r"
     debug_mode = True  # If True debug mode is on, False otherwise
 
     def __init__(self, configuration=None):
