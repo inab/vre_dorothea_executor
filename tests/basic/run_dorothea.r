@@ -2,6 +2,7 @@ library(dorothea)
 library(dplyr)
 library(tibble)
 library(ggplot2)
+library(viper)
 
 writeLines("Reading arguments")
 args = commandArgs(trailingOnly = TRUE)
