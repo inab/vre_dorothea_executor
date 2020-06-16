@@ -65,7 +65,7 @@ for(i in condition){
     ylab("Normalized Enrichment scores (NES)")
 
   dir.create("img", recursive = T)
-  file_png = paste0("img/top_", as.character(top_n), "_", i, ".png"))
+  file_png = paste0("img/top_", as.character(top_n), "_", i, ".png")
   ggsave(filename = file_png, plot = topN_barplot)
 
 }
