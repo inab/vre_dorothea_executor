@@ -1,0 +1,60 @@
+{
+    "input_files": [
+        {
+            "name": "input_reads",
+            "value": "unique_file_id_5e14abe0a37012.29503901",
+            "required": true,
+            "allow_multiple": false
+        }
+    ],
+    "arguments": [
+        {
+            "name": "execution",
+            "value": "/home/user/vre_dorothea_executor/tests/basic/run000"
+        },
+        {
+            "name": "project",
+            "value": "test"
+        },
+        {
+            "name": "confidence_level",
+            "value": "A,B,C"
+        },
+        {
+            "name": "minsize",
+            "value": 5
+        },
+        {
+            "name": "top_n",
+            "value": 25
+        }
+    ],
+    "output_files": [
+        {
+            "name": "dorothea_scores",
+            "required": true,
+            "allow_multiple": false,
+            "file": {
+                "file_type": "CSV",
+                "data_type": "dorothea_scores",
+                "meta_data": {
+                    "visible": true,
+                    "description": "Normalized enrichment scores for Transciption Factors"
+                }
+            }
+        },
+        {
+            "name": "topN",
+            "required": true,
+            "allow_multiple": false,
+            "file": {
+                "file_type": "TAR",
+                "data_type": "tool_statistics",
+                "meta_data": {
+                    "visible": true,
+                    "description": "Plots"
+                }
+            }
+        }
+    ]
+}
