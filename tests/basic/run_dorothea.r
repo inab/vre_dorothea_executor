@@ -14,7 +14,6 @@ method = "scale"
 if (dorothea_file == "dorothea_example.csv"){ method = "none" }
 
 writeLines("Creating output file names")
-dir.create("results", recursive = T)
 file_csv = paste0("dorothea_scores_",  paste0(confidence_level, collapse = ""), ".csv")
 
 writeLines("Reading files")
@@ -65,7 +64,7 @@ for(i in conditions){
     ylab("Normalized Enrichment scores (NES)")
 
   dir.create("img", recursive = T)
-  file_png = paste0("img/top_", as.character(top_n), "_", i, ".png")
+  file_png = paste0("img/top_", as.character(topN), "_", i, ".png")
   ggsave(filename = file_png, plot = topN_barplot)
 
 }
