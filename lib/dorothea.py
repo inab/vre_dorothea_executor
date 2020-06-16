@@ -17,6 +17,7 @@
    limitations under the License.
 """
 import subprocess
+import tarfile
 
 from utils import logger
 
@@ -47,3 +48,17 @@ class Dorothea:
              str(args_list[4])], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         return process
+
+    def tar_result(self, img_path, filename):
+        """
+        TAR output images from dorothea execution
+
+        :param img_path: output images path
+        :param filename: tar output file name
+        :type img_path: str
+        :type filename: str
+        :return:
+        """
+        tar = tarfile.open(filename, "w:gz")
+        tar.add(img_path)
+        tar.close()

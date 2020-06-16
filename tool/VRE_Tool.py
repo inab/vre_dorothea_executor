@@ -31,6 +31,7 @@ class WF_RUNNER(Tool):
 
     MASKED_KEYS = {'execution', 'project', 'confidence_level', 'minsize', 'top_n'}  # arguments from config.json
     R_SCRIPT_PATH = "/home/user/vre_dorothea_executor/tests/basic/run_dorothea.r"
+    TAR_FILENAME = "dorothea_plots.tar.gz"
     debug_mode = True  # If True debug mode is on, False otherwise
 
     def __init__(self, configuration=None):
@@ -50,8 +51,10 @@ class WF_RUNNER(Tool):
             if isinstance(v, list):
                 self.configuration[k] = ' '.join(v)
 
+        self.dorothea = Dorothea()  # object Dorothea
         self.outputs = dict()
         self.execution_path = None
+        self.img_path = None
 
     def execute_dorothea(self, input_files, arguments):  # pylint: disable=no-self-use
         """
@@ -72,7 +75,7 @@ class WF_RUNNER(Tool):
                 raise Exception(errstr)
 
             # Dorothea execution
-            process = Dorothea.execute_dorothea_rscript(csv_input_path, arguments, self.R_SCRIPT_PATH)
+            process = self.dorothea.execute_dorothea_rscript(csv_input_path, arguments, self.R_SCRIPT_PATH)
 
             # Sending the Dorothea execution stdout to the log file
             for line in iter(process.stderr.readline, b''):
@@ -115,7 +118,7 @@ class WF_RUNNER(Tool):
 
             # Set and validate execution directory. If not exists the directory will be created.
             execution_path = os.path.abspath(self.configuration.get('execution', '.'))
-            self.execution_path = execution_path    # save execution path
+            self.execution_path = execution_path  # save execution path
             if not os.path.isdir(execution_path):
                 os.makedirs(execution_path)
 
@@ -130,6 +133,17 @@ class WF_RUNNER(Tool):
 
             logger.debug("Init Dorothea execution")
             self.execute_dorothea(input_files, self.configuration)
+
+            # TAR output images from dorothea execution
+            self.img_path = execution_path + "/img/"
+            if os.path.isdir(self.img_path) and len(os.listdir(self.img_path) != 0):  # img folder exists and is not empty
+                logger.debug("TAR Dorothea images")
+                self.dorothea.tar_result(self.img_path, self.TAR_FILENAME)
+
+            else:
+                errstr = "folder is not created or is empty"
+                logger.fatal(errstr)
+                raise Exception(errstr)
 
             # Create and validate the output files
             self.create_output_files(output_files, output_metadata)
@@ -163,9 +177,10 @@ class WF_RUNNER(Tool):
                 pop_output_path = list()  # list of tuples (path, type of output)
                 if out_id in output_files.keys():  # out_id in metadata
                     if out_id == "dorothea_scores":
-                        file_path = self.execution_path + "/" + out_id + "_" + confidence_level.replace(',', '') + ".csv"
+                        file_path = self.execution_path + "/" + out_id + "_" + confidence_level.replace(',',
+                                                                                                        '') + ".csv"
                     else:
-                        file_path = self.execution_path + "/" + out_id + "_" + str(top_n) + ".png"
+                        file_path = self.img_path + self.TAR_FILENAME
 
                     file_type = "file"
                     pop_output_path.append((file_path, file_type))  # add file_path and file_type
