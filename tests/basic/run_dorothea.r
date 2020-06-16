@@ -42,7 +42,7 @@ tf_activities_stat <- tf_activities_stat %>%
   as.data.frame() %>%
   rownames_to_column(var = "GeneID")
 
-for(i in condition){
+for(i in conditions){
 
   aux <- tf_activities_stat[, c("GeneID", i)] %>%
     dplyr::rename(NES = "t") %>%
