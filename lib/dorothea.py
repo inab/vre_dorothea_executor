@@ -41,11 +41,15 @@ class Dorothea:
         """
         logger.debug("Starting dorothea execution")
         args_list = list(arguments.values())
-        print(args_list)
+        print(input_r_script_path)
+        print(input_csv_path)
+        print(args_list[3])
+        print(str(args_list[4]))
+        print(str(args_list[5]))
 
         process = subprocess.Popen(
-            ['/usr/bin/Rscript', '--vanilla', input_r_script_path, input_csv_path, args_list[2], str(args_list[3]),
-             str(args_list[4])], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            ['/usr/bin/Rscript', '--vanilla', input_r_script_path, input_csv_path, args_list[3], str(args_list[4]),
+             str(args_list[5])], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         return process
 

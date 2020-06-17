@@ -7,7 +7,7 @@ library(viper)
 writeLines("Reading arguments")
 args = commandArgs(trailingOnly = TRUE)
 dorothea_file = args[1]
-confidence_level = unlist(strsplit(args[2], ","))
+confidence_level = unlist(strsplit(args[2], " "))
 minsize = as.numeric(args[3])
 topN = as.numeric(args[4])
 method = "scale"
@@ -15,7 +15,9 @@ method = "scale"
 if (dorothea_file == "dorothea_example.csv"){ method = "none" }
 
 writeLines("Creating output file names")
-file_csv = paste0("dorothea_scores_",  paste0(confidence_level, collapse = ""), ".csv")
+file_csv = paste0("dorothea_scores_",  paste0(confidence_level, collapse = " "), ".csv")
+
+print(file_csv)
 
 writeLines("Reading files")
 dorothea_matrix <- as.matrix(read.csv(dorothea_file, row.names = 1))

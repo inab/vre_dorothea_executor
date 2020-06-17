@@ -14,7 +14,11 @@
         },
         {
             "name": "project",
-            "value": "test"
+            "value": null
+        },
+        {
+            "name": "description",
+            "value": null
         },
         {
             "name": "confidence_level",
