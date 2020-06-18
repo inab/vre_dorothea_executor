@@ -9,11 +9,15 @@ message("Reading arguments")
 args = commandArgs(trailingOnly = TRUE)
 dorothea_file = args[1]
 confidence_level = unlist(strsplit(args[2], " "))
+warning(class(confidence_level))
 minsize = as.numeric(args[3])
+warning(class(minsize))
 topN = as.numeric(args[4])
+warning(class(topN))
 method = "scale"
 
-if (dorothea_file == "dorothea_example.csv"){ method = "none" }
+warning(dorothea_file)
+if (as.logical(grep("dorothea_example.csv", dorothea_file, fixed=T))){ method = "none" }
 
 message("Creating output file names")
 file_csv = paste0("dorothea_scores_",  paste0(confidence_level, collapse = ""), ".csv")
@@ -21,8 +25,10 @@ file_csv = paste0("dorothea_scores_",  paste0(confidence_level, collapse = ""), 
 message("Reading files")
 dorothea_matrix <- as.matrix(read.csv(dorothea_file, row.names = 1))
 
-print(head(dorothea_matrix))
-warning(head(dorothea_matrix))
+message(head(dorothea_matrix))
+warning(head(dorothea_matrix[,"t"]))
+warning(class(dorothea_matrix[,"t"]))
+warning(class(dorothea_matrix))
 # dorothea_matrix[,"t"] = as.numeric(dorothea_matrix[,"t"])
 
 message("Calculating dorothea")
@@ -33,6 +39,8 @@ regulons <- dorothea_hs %>%
 print(head(regulons))
 warning(head(regulons))
 
+message(minsize)
+message(method)
 tf_activities_stat <- dorothea::run_viper(dorothea_matrix, regulons,
                                           options =  list(minsize = minsize,
                                             method = method,
