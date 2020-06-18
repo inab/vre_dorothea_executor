@@ -136,7 +136,7 @@ class WF_RUNNER(Tool):
 
             # TAR output images from dorothea execution
             self.img_path = execution_path + "/img/"
-            if os.path.isdir(self.img_path) and len(os.listdir(self.img_path) != 0):  # img folder exists and is not empty
+            if os.path.isdir(self.img_path) and len(os.listdir(self.img_path)) != 0:  # img folder exists and is not empty
                 logger.debug("TAR Dorothea images")
                 self.dorothea.tar_result(self.img_path, self.TAR_FILENAME)
 
@@ -170,17 +170,16 @@ class WF_RUNNER(Tool):
         """
         try:
             confidence_level = self.configuration.get('confidence_level', '.')
-            top_n = self.configuration.get('top_n', '.')
 
             for metadata in output_metadata:  # for each output file in output_metadata
                 out_id = metadata["name"]
                 pop_output_path = list()  # list of tuples (path, type of output)
                 if out_id in output_files.keys():  # out_id in metadata
                     if out_id == "dorothea_scores":
-                        file_path = self.execution_path + "/" + out_id + "_" + confidence_level.replace(',',
+                        file_path = self.execution_path + "/" + out_id + "_" + confidence_level.replace(' ',
                                                                                                         '') + ".csv"
                     else:
-                        file_path = self.img_path + self.TAR_FILENAME
+                        file_path = self.execution_path + "/" + self.TAR_FILENAME
 
                     file_type = "file"
                     pop_output_path.append((file_path, file_type))  # add file_path and file_type

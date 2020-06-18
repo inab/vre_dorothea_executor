@@ -4,7 +4,8 @@ library(tibble)
 library(ggplot2)
 library(viper)
 
-writeLines("Reading arguments")
+
+message("Reading arguments")
 args = commandArgs(trailingOnly = TRUE)
 dorothea_file = args[1]
 confidence_level = unlist(strsplit(args[2], " "))
@@ -14,18 +15,23 @@ method = "scale"
 
 if (dorothea_file == "dorothea_example.csv"){ method = "none" }
 
-writeLines("Creating output file names")
-file_csv = paste0("dorothea_scores_",  paste0(confidence_level, collapse = " "), ".csv")
+message("Creating output file names")
+file_csv = paste0("dorothea_scores_",  paste0(confidence_level, collapse = ""), ".csv")
 
-print(file_csv)
-
-writeLines("Reading files")
+message("Reading files")
 dorothea_matrix <- as.matrix(read.csv(dorothea_file, row.names = 1))
 
-writeLines("Calculating dorothea")
+print(head(dorothea_matrix))
+warning(head(dorothea_matrix))
+# dorothea_matrix[,"t"] = as.numeric(dorothea_matrix[,"t"])
+
+message("Calculating dorothea")
 data(dorothea_hs, package = "dorothea")
 regulons <- dorothea_hs %>%
   dplyr::filter(confidence %in% confidence_level)
+
+print(head(regulons))
+warning(head(regulons))
 
 tf_activities_stat <- dorothea::run_viper(dorothea_matrix, regulons,
                                           options =  list(minsize = minsize,
@@ -33,13 +39,15 @@ tf_activities_stat <- dorothea::run_viper(dorothea_matrix, regulons,
                                             eset.filter = FALSE, cores = 1,
                                             verbose = FALSE, nes = TRUE))
 
+print(head(tf_activities_stat))
+warning(head(tf_activities_stat))
 write.csv(tf_activities_stat, file_csv, quote=F)
 
 ## FIGURES ##
 conditions = colnames(tf_activities_stat)
 
 # Top N TFs based on the normalized enrichment scores in a bar plot per sample
-writeLines("Creating bar plot for all conditions")
+message("Creating bar plot for all conditions")
 tf_activities_stat <- tf_activities_stat %>%
   as.data.frame() %>%
   rownames_to_column(var = "GeneID")
@@ -72,4 +80,4 @@ for(i in conditions){
 
 }
 
-writeLines("Finished")
+message("Finished")
