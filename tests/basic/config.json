@@ -22,7 +22,7 @@
         },
         {
             "name": "confidence_level",
-            "value": "A,B,C"
+            "value": "A B C"
         },
         {
             "name": "minsize",

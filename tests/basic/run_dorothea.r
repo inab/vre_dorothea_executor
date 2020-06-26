@@ -4,51 +4,42 @@ library(tibble)
 library(ggplot2)
 library(viper)
 
-
-message("Reading arguments")
+message("STARTING DOROTHEA PROCESS")
+message("Reading input arguments:")
 args = commandArgs(trailingOnly = TRUE)
 dorothea_file = args[1]
 confidence_level = unlist(strsplit(args[2], " "))
-warning(class(confidence_level))
 minsize = as.numeric(args[3])
-warning(class(minsize))
 topN = as.numeric(args[4])
-warning(class(topN))
 method = "scale"
+message(dorothea_file)
+message(confidence_level)
+message(minsize)
+message(topN)
+message(method)
 
-warning(dorothea_file)
 if (as.logical(grep("dorothea_example.csv", dorothea_file, fixed=T))){ method = "none" }
 
-message("Creating output file names")
+message("Creating output file")
 file_csv = paste0("dorothea_scores_",  paste0(confidence_level, collapse = ""), ".csv")
+message(file_csv)
 
-message("Reading files")
+message("Calculating dorothea matrix")
 dorothea_matrix <- as.matrix(read.csv(dorothea_file, row.names = 1))
 
-message(head(dorothea_matrix))
-warning(head(dorothea_matrix[,"t"]))
-warning(class(dorothea_matrix[,"t"]))
-warning(class(dorothea_matrix))
-# dorothea_matrix[,"t"] = as.numeric(dorothea_matrix[,"t"])
-
-message("Calculating dorothea")
+message("Calculating dorothea regulons")
 data(dorothea_hs, package = "dorothea")
 regulons <- dorothea_hs %>%
   dplyr::filter(confidence %in% confidence_level)
 
-print(head(regulons))
-warning(head(regulons))
-
-message(minsize)
-message(method)
+message("Running dorothea")
 tf_activities_stat <- dorothea::run_viper(dorothea_matrix, regulons,
                                           options =  list(minsize = minsize,
                                             method = method,
                                             eset.filter = FALSE, cores = 1,
                                             verbose = FALSE, nes = TRUE))
 
-print(head(tf_activities_stat))
-warning(head(tf_activities_stat))
+message("Writing output file")
 write.csv(tf_activities_stat, file_csv, quote=F)
 
 ## FIGURES ##
@@ -88,4 +79,4 @@ for(i in conditions){
 
 }
 
-message("Finished")
+message("FINISHING DOROTHEA PROCESS")
