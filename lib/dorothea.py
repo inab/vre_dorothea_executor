@@ -26,7 +26,6 @@ class Dorothea:
     """
     This is a class for Dorothea module.
     """
-    test_mode = True  # If True local test is on, False otherwise
 
     @staticmethod
     def execute_dorothea_rscript(input_csv_path, arguments, input_r_script_path):
@@ -40,12 +39,14 @@ class Dorothea:
         :param input_r_script_path: Path of R script file
         :type input_r_script_path: str
         """
-        logger.debug("Starting dorothea execution")
+        logger.debug("Starting Dorothea execution")
         args_list = list(arguments.values())
 
         cmd = [
             '/usr/bin/Rscript',
-            '--vanilla', input_r_script_path, input_csv_path,
+            '--vanilla', 
+            input_r_script_path, 
+            input_csv_path,
             args_list[3],
             str(args_list[4]),
             str(args_list[5])

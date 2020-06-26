@@ -31,7 +31,7 @@ class WF_RUNNER(Tool):
     """
 
     MASKED_KEYS = {'execution', 'project', 'confidence_level', 'minsize', 'top_n'}  # arguments from config.json
-    R_SCRIPT_PATH = "/Users/laurarodrigueznavas/PycharmProjects/vre_dorothea_executor/tests/basic/run_dorothea.r"
+    R_SCRIPT_PATH = "/home/user/vre_dorothea_executor/tests/basic/run_dorothea.r"
     TAR_FILENAME = "dorothea_plots.tar.gz"
     debug_mode = False  # If True debug mode is on, False otherwise
 
@@ -67,11 +67,11 @@ class WF_RUNNER(Tool):
         :type arguments: dict
         """
         try:
-            logger.debug("Getting the CSV input file")
+            logger.debug("Getting CSV input file")
             csv_input_path = input_files["input_reads"]
 
             if csv_input_path is None:
-                errstr = "csv_input parameter must be defined"
+                errstr = "CSV input file must be defined"
                 logger.fatal(errstr)
                 raise Exception(errstr)
 
@@ -91,10 +91,10 @@ class WF_RUNNER(Tool):
                 logger.progress("Something went wrong inside the R execution. See logs", status="WARNING")
 
             else:
-                logger.progress("R execution finished successfully", status="FINISHED")
+                logger.progress("Dorothea execution finished successfully", status="FINISHED")
 
         except:
-            errstr = "The R execution failed. See logs"
+            errstr = "The Dorothea execution failed. See logs"
             logger.error(errstr)
             raise Exception(errstr)
 
