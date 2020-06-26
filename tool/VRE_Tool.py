@@ -17,6 +17,7 @@
    limitations under the License.
 """
 import os
+import shutil
 import time
 
 from basic_modules.tool import Tool
@@ -30,9 +31,9 @@ class WF_RUNNER(Tool):
     """
 
     MASKED_KEYS = {'execution', 'project', 'confidence_level', 'minsize', 'top_n'}  # arguments from config.json
-    R_SCRIPT_PATH = "/home/user/vre_dorothea_executor/tests/basic/run_dorothea.r"
+    R_SCRIPT_PATH = "/Users/laurarodrigueznavas/PycharmProjects/vre_dorothea_executor/tests/basic/run_dorothea.r"
     TAR_FILENAME = "dorothea_plots.tar.gz"
-    debug_mode = True  # If True debug mode is on, False otherwise
+    debug_mode = False  # If True debug mode is on, False otherwise
 
     def __init__(self, configuration=None):
         """
@@ -51,7 +52,7 @@ class WF_RUNNER(Tool):
             if isinstance(v, list):
                 self.configuration[k] = ' '.join(v)
 
-        self.dorothea = Dorothea()  # object Dorothea
+        self.dorothea = Dorothea()
         self.outputs = dict()
         self.execution_path = None
         self.img_path = None
@@ -62,7 +63,7 @@ class WF_RUNNER(Tool):
 
         param input_files: List of input files - In this case there are no input files required.
         :type input_files: dict
-        :param arguments: dict containing tool arguments
+        :param arguments: Dict containing tool arguments
         :type arguments: dict
         """
         try:
@@ -87,8 +88,7 @@ class WF_RUNNER(Tool):
                 time.sleep(0.1)
 
             if rc is not None and rc != 0:
-                logger.progress("Something went wrong inside the R execution. See logs",
-                                status="WARNING")
+                logger.progress("Something went wrong inside the R execution. See logs", status="WARNING")
 
             else:
                 logger.progress("R execution finished successfully", status="FINISHED")
@@ -131,17 +131,19 @@ class WF_RUNNER(Tool):
             os.chdir(execution_path)
             logger.debug("Execution path: {}".format(execution_path))
 
-            logger.debug("Init Dorothea execution")
+            logger.debug("Dorothea execution")
             self.execute_dorothea(input_files, self.configuration)
 
             # TAR output images from dorothea execution
             self.img_path = execution_path + "/img/"
-            if os.path.isdir(self.img_path) and len(os.listdir(self.img_path)) != 0:  # img folder exists and is not empty
+            if os.path.isdir(self.img_path) and len(os.listdir(self.img_path)) != 0:
+                # if img folder exists and is not empty
                 logger.debug("TAR Dorothea images")
                 self.dorothea.tar_result(self.img_path, self.TAR_FILENAME)
+                shutil.rmtree(self.img_path)  # remove image folder
 
             else:
-                errstr = "folder is not created or is empty"
+                errstr = "Image folder is not created or is empty"
                 logger.fatal(errstr)
                 raise Exception(errstr)
 
@@ -174,15 +176,14 @@ class WF_RUNNER(Tool):
             for metadata in output_metadata:  # for each output file in output_metadata
                 out_id = metadata["name"]
                 pop_output_path = list()  # list of tuples (path, type of output)
-                if out_id in output_files.keys():  # out_id in metadata
+                if out_id in output_files.keys():
                     if out_id == "dorothea_scores":
-                        file_path = self.execution_path + "/" + out_id + "_" + confidence_level.replace(' ',
-                                                                                                        '') + ".csv"
+                        file_path = self.execution_path + "/" + out_id + "_" + \
+                                    confidence_level.replace(' ', '') + ".csv"
                     else:
                         file_path = self.execution_path + "/" + self.TAR_FILENAME
 
-                    file_type = "file"
-                    pop_output_path.append((file_path, file_type))  # add file_path and file_type
+                    pop_output_path.append((file_path, "file"))  # add file_path and file_type
 
                     output_files[out_id] = pop_output_path  # create output files
                     self.outputs[out_id] = pop_output_path  # save output files

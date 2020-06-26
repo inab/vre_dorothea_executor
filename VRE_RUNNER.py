@@ -78,7 +78,7 @@ def main_json(config_path, in_metadata_path, out_metadata_path):
     """
     Main function.
 
-    This function launches the app using configuration written in two json files: config.json and input_metadata.json.
+    This function launches the app using configuration written in two json files: defineIO.json and input_metadata.json.
 
     :param config_path: path to a valid JSON file containing information on how the tool should be executed.
     :type config_path: str
