@@ -119,23 +119,23 @@ class WF_RUNNER(Tool):
             # Set and validate execution directory. If not exists the directory will be created.
             execution_path = os.path.abspath(self.configuration.get('execution', '.'))
             self.execution_path = execution_path  # save execution path
-            if not os.path.isdir(execution_path):
-                os.makedirs(execution_path)
+            if not os.path.isdir(self.execution_path):
+                os.makedirs(self.execution_path)
 
             # Set and validate execution parent directory. If not exists the directory will be created.
-            execution_parent_dir = os.path.dirname(execution_path)
+            execution_parent_dir = os.path.dirname(self.execution_path)
             if not os.path.isdir(execution_parent_dir):
                 os.makedirs(execution_parent_dir)
 
             # Update working directory to execution path
-            os.chdir(execution_path)
-            logger.debug("Execution path: {}".format(execution_path))
+            os.chdir(self.execution_path)
+            logger.debug("Execution path: {}".format(self.execution_path))
 
             logger.debug("Dorothea execution")
             self.execute_dorothea(input_files, self.configuration)
 
             # TAR output images from dorothea execution
-            self.img_path = execution_path + "/img/"
+            self.img_path = self.execution_path + "/img/"
             if os.path.isdir(self.img_path) and len(os.listdir(self.img_path)) != 0:
                 # if img folder exists and is not empty
                 logger.debug("TAR Dorothea images")

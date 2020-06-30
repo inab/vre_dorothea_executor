@@ -18,6 +18,7 @@
 """
 import subprocess
 import tarfile
+import os
 
 from utils import logger
 
@@ -67,5 +68,5 @@ class Dorothea:
         :return:
         """
         tar = tarfile.open(filename, "w:gz")
-        tar.add(img_path)
+        tar.add(os.path.split(os.path.dirname(img_path))[1])
         tar.close()
