@@ -18,15 +18,23 @@ message(minsize)
 message(topN)
 message(method)
 
-if (as.logical(grep("dorothea_example.csv", dorothea_file, fixed=T))){ method = "none" }
+file =  unlist(strsplit(dorothea_file, split = "/"))
+file = file[length(file)]
+message(file)
+if (file == "dorothea_example.csv" ){ method = "none" }
 
 message("Creating output file")
 file_csv = paste0("dorothea_scores_",  paste0(confidence_level, collapse = ""), ".csv")
 message(file_csv)
-
+message(method)
 message("Calculating dorothea matrix")
-dorothea_matrix <- as.matrix(read.csv(dorothea_file, row.names = 1))
 
+dorothea_matrix <- as.matrix(read.csv(dorothea_file, row.names = 1))
+#message(head(dorothea_matrix))
+#message(class(dorothea_matrix[,1]))
+#dorothea_matrix = cbind(dorothea_matrix, dorothea_matrix[,1]*1.5)
+#colnames(dorothea_matrix) = c("t", "m")
+#write.csv(dorothea_matrix, "data_test.csv", quote=F)
 message("Calculating dorothea regulons")
 data(dorothea_hs, package = "dorothea")
 regulons <- dorothea_hs %>%
@@ -39,12 +47,13 @@ tf_activities_stat <- dorothea::run_viper(dorothea_matrix, regulons,
                                             eset.filter = FALSE, cores = 1,
                                             verbose = FALSE, nes = TRUE))
 
+colnames(tf_activities_stat) = c("t", "m")
 message("Writing output file")
 write.csv(tf_activities_stat, file_csv, quote=F)
 
 ## FIGURES ##
 conditions = colnames(tf_activities_stat)
-
+message(conditions)
 # Top N TFs based on the normalized enrichment scores in a bar plot per sample
 message("Creating bar plot for all conditions")
 tf_activities_stat <- tf_activities_stat %>%
@@ -54,7 +63,7 @@ tf_activities_stat <- tf_activities_stat %>%
 for(i in conditions){
 
   aux <- tf_activities_stat[, c("GeneID", i)] %>%
-    dplyr::rename(NES = "t") %>%
+    dplyr::rename(NES = i) %>%
     dplyr::top_n(topN, wt = abs(NES)) %>%
     dplyr::arrange(NES) %>%
     dplyr::mutate(GeneID = factor(GeneID))

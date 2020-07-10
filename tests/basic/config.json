@@ -54,6 +54,7 @@
             "file": {
                 "file_type": "TAR",
                 "data_type": "tool_statistics",
+                "compressed": "TGZ",
                 "meta_data": {
                     "visible": true,
                     "description": "Plots"
