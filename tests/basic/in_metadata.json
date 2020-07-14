@@ -1,30 +1,32 @@
 [
     {
-        "_id": "unique_file_id_5e14abe0a37012.29503901",
-        "type": "file",
-        "file_path": "/home/user/vre_dorothea_executor/tests/basic/data_test.csv",
+        "_id": "unique_file_id_5f0d9cada30326.28600777",
+        "file_path": "/home/user/vre_dorothea_executor/tests/basic/dorothea_example.csv",
         "file_type": "CSV",
         "data_type": "expression_profile",
         "compressed": 0,
-	   "sources": [],
+        "sources": [],
         "user_id": "user_id",
         "creation_time": {
-            "sec": 1578413024,
-            "usec": 0
+            "$date": {
+                "$numberLong": "1594727597000"
+            }
         },
         "taxon_id": 0,
         "meta_data": {
             "type": "file",
             "size": 0,
-            "project": "test",
+            "project": "my_project_id",
             "atime": {
-                "sec": 1578413024,
-                "usec": 0
+                "$date": {
+                    "$numberLong": "1594727597000"
+                }
             },
-            "parentDir": "unique_file_id_5e14abe0a37742.64003100",
+            "parentDir": "unique_file_id_5f0d9cada30920.05450962",
             "lastAccess": {
-                "sec": 1578413024,
-                "usec": 0
+                "$date": {
+                    "$numberLong": "1594727597000"
+                }
             }
         }
     }

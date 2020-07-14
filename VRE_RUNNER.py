@@ -106,7 +106,7 @@ def main_json(config_path, in_metadata_path, out_metadata_path):
 if __name__ == "__main__":
 
     # Set up the command line parameters
-    PARSER = argparse.ArgumentParser(description="VRE Dorothea workflow runner")
+    PARSER = argparse.ArgumentParser(description="VRE Dorothea runner")
     PARSER.add_argument("--config", help="Configuration file", required=True)
     PARSER.add_argument("--in_metadata", help="Location of input metadata file", required=True)
     PARSER.add_argument("--out_metadata", help="Location of output metadata file", required=True)

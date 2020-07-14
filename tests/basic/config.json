@@ -2,7 +2,7 @@
     "input_files": [
         {
             "name": "input_reads",
-            "value": "unique_file_id_5e14abe0a37012.29503901",
+            "value": "unique_file_id_5f0d9cada30326.2860077",
             "required": true,
             "allow_multiple": false
         }
@@ -14,15 +14,15 @@
         },
         {
             "name": "project",
-            "value": null
-        },
-        {
-            "name": "description",
-            "value": null
+            "value": "my_project_id"
         },
         {
             "name": "confidence_level",
-            "value": "A B C"
+            "value": [
+                "A",
+                "B",
+                "C"
+            ]
         },
         {
             "name": "minsize",
@@ -53,8 +53,8 @@
             "allow_multiple": false,
             "file": {
                 "file_type": "TAR",
-                "data_type": "tool_statistics",
                 "compressed": "TGZ",
+                "data_type": "tool_statistics",
                 "meta_data": {
                     "visible": true,
                     "description": "Plots"
