@@ -22,7 +22,7 @@ import sys
 from basic_modules.workflow import Workflow
 from utils import logger
 from apps.jsonapp import JSONApp
-from tool.VRE_Tool import WF_RUNNER
+from tool.VRE_Tool import RUNNER
 
 
 class process_WF_RUNNER(Workflow):
@@ -64,7 +64,7 @@ class process_WF_RUNNER(Workflow):
         """
         try:
             logger.debug("Initialise the Dorothea")
-            tt_handle = WF_RUNNER(self.configuration)
+            tt_handle = RUNNER(self.configuration)
             tt_files, tt_meta = tt_handle.run(input_files, metadata, output_files, output_metadata)
             return tt_files, tt_meta
 
