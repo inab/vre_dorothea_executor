@@ -14,7 +14,7 @@
         },
         {
             "name": "project",
-            "value": "my_project_id"
+            "value": "test"
         },
         {
             "name": "confidence_level",
@@ -29,8 +29,8 @@
             "value": 5
         },
         {
-            "name": "top_n",
-            "value": 25
+            "name": "method",
+            "value": "scale"
         }
     ],
     "output_files": [
@@ -44,20 +44,6 @@
                 "meta_data": {
                     "visible": true,
                     "description": "Normalized enrichment scores for Transciption Factors"
-                }
-            }
-        },
-        {
-            "name": "topN",
-            "required": true,
-            "allow_multiple": false,
-            "file": {
-                "file_type": "TAR",
-                "compressed": "TGZ",
-                "data_type": "tool_statistics",
-                "meta_data": {
-                    "visible": true,
-                    "description": "Plots"
                 }
             }
         }

@@ -1,7 +1,7 @@
 [
     {
-        "_id": "unique_file_id_5f0d9cada30326.28600777",
-        "file_path": "/home/user/vre_dorothea_executor/tests/basic/dorothea_example.csv",
+        "_id": "unique_file_id_5f0d9cada30326.2860077",
+        "file_path": "/home/user/vre_dorothea_executor/tests/basic/data/data_test.csv",
         "file_type": "CSV",
         "data_type": "expression_profile",
         "compressed": 0,

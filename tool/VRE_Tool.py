@@ -30,8 +30,8 @@ class RUNNER(Tool):
     This is a class for Dorothea Tool module.
     """
 
-    MASKED_KEYS = {'execution', 'project', 'confidence_level', 'minsize', 'top_n'}  # arguments from config.json
-    R_SCRIPT_PATH = "/home/user/vre_dorothea_executor/lib/basic/run_dorothea.r"
+    MASKED_KEYS = {'execution', 'project', 'description', 'confidence_level', 'minsize', 'method'}  # arguments from config.json
+    R_SCRIPT_PATH = "/home/user/vre_dorothea_executor/lib/run_dorothea.r"
     TAR_FILENAME = "dorothea_plots.tar.gz"
     debug_mode = False  # If True debug mode is on, False otherwise
 
@@ -74,6 +74,8 @@ class RUNNER(Tool):
                 errstr = "CSV input file must be defined"
                 logger.fatal(errstr)
                 raise Exception(errstr)
+
+            print(arguments)
 
             # Dorothea execution
             process = self.dorothea.execute_dorothea_rscript(csv_input_path, arguments, self.R_SCRIPT_PATH)
@@ -135,17 +137,17 @@ class RUNNER(Tool):
             self.execute_dorothea(input_files, self.configuration)
 
             # TAR output images from dorothea execution
-            self.img_path = self.execution_path + "/img/"
-            if os.path.isdir(self.img_path) and len(os.listdir(self.img_path)) != 0:
-                # if img folder exists and is not empty
-                logger.debug("TAR Dorothea images")
-                self.dorothea.tar_result(self.img_path, self.TAR_FILENAME)
-                shutil.rmtree(self.img_path)  # remove image folder
-
-            else:
-                errstr = "Image folder is not created or is empty"
-                logger.fatal(errstr)
-                raise Exception(errstr)
+            # self.img_path = self.execution_path + "/img/"
+            # if os.path.isdir(self.img_path) and len(os.listdir(self.img_path)) != 0:
+            #     # if img folder exists and is not empty
+            #     logger.debug("TAR Dorothea images")
+            #     self.dorothea.tar_result(self.img_path, self.TAR_FILENAME)
+            #     shutil.rmtree(self.img_path)  # remove image folder
+            #
+            # else:
+            #     errstr = "Image folder is not created or is empty"
+            #     logger.fatal(errstr)
+            #     raise Exception(errstr)
 
             # Create and validate the output files
             self.create_output_files(output_files, output_metadata)
