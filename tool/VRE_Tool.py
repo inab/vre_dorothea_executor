@@ -31,7 +31,7 @@ class RUNNER(Tool):
     """
 
     MASKED_KEYS = {'execution', 'project', 'confidence_level', 'minsize', 'top_n'}  # arguments from config.json
-    R_SCRIPT_PATH = "/home/user/vre_dorothea_executor/tests/basic/run_dorothea.r"
+    R_SCRIPT_PATH = "/home/user/vre_dorothea_executor/lib/basic/run_dorothea.r"
     TAR_FILENAME = "dorothea_plots.tar.gz"
     debug_mode = False  # If True debug mode is on, False otherwise
 
