@@ -17,15 +17,22 @@ sudo apt install python3.6-pip python3.6-dev python3.6-venv
 sudo apt install r-base
 ```
 
+- [DoRothEA](https://github.com/saezlab/dorothea)
+
+```bash
+sudo su
+su www-data -s /bin/bash
+./Rdorothea.sh
+su user
+```
+
 ## Installation
 
 Directly from GitHub:
 
 ```bash
 cd $HOME
-
 git clone https://github.com/inab/vre_dorothea_executor.git
-
 cd vre_dorothea_executor
 ```
 
