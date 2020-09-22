@@ -19,6 +19,8 @@ sudo apt install r-base
 
 - [DoRothEA](https://github.com/saezlab/dorothea)
 
+Install R library dependencies:
+
 ```bash
 sudo su
 su www-data -s /bin/bash
