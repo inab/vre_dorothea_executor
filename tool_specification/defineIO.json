@@ -78,20 +78,6 @@
           "description": "Normalized enrichment scores for Transciption Factors"
         }
       }
-    },
-    {
-      "name": "topN",
-      "required": true,
-      "allow_multiple": false,
-      "file": {
-        "file_type": "TAR",
-        "compressed": "TGZ",
-        "data_type": "tool_statistics",
-        "meta_data": {
-          "visible": true,
-          "description": "Plots"
-        }
-      }
     }
   ]
 }
