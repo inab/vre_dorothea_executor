@@ -1,31 +1,28 @@
 # iPC VRE DoRothEA Executor
 
-Example pipelines file that is ready to run in the VRE matching the code in the HowTo documentation.
-
-This repo structure dorothea and tools can be forked and used as the base template for new tools and dorothea. It should have all of the base functionality and is set up for unit testing and with pylint to ensure code clarity.
-
 ## Requirements
 
-- Python 3.6 or later (Recommended 3.7)
-- Python3.6-pip, Python3.6-dev and Python3.6-venv or later
-- R-4.0
+- Python 3.6 or later
+- R
+- git
 
 ```bash
 sudo apt update
-sudo apt install python3.6 
-sudo apt install python3.6-pip python3.6-dev python3.6-venv
+sudo apt install python3
 sudo apt install r-base
+sudo apt install git
 ```
-
-- [DoRothEA](https://github.com/saezlab/dorothea)
-
-Install R library dependencies:
+In order to install the Python dependencies you need pip and venv modules.
 
 ```bash
-sudo su
-su www-data -s /bin/bash
+sudo apt install python3-pip python3-venv
+```
+
+Install [DoRothEA](https://github.com/saezlab/dorothea) dependencies:
+
+```bash
+cd dorothea
 ./Rdorothea.sh
-su user
 ```
 
 ## Installation
@@ -41,12 +38,20 @@ cd vre_dorothea_executor
 Create the Python environment:
 
 ```bash
-python3 -m venv $HOME/vre_dorothea_executor/venv
+python3 -m venv venv
 source venv/bin/activate
+pip install --upgrade wheel
 pip install -r requirements.txt
 ```
 
 ## Run the Wrapper
+
 ```bash
 ./VRE_RUNNER --config tests/basic/config.json --in_metadata tests/basic/in_metadata.json --out_metadata out_metadata.json --log_file VRE_RUNNER.log
 ```
+
+## License
+* © 2020 Barcelona Supercomputing Center (BSC), ES
+* © 2020 Universitätsklinikum Heidelberg (UKL-HD), DE
+
+Licensed under the Apache License, version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>, see the file `LICENSE.txt` for details.
