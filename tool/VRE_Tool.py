@@ -25,7 +25,7 @@ from utils import logger
 from lib.dorothea import Dorothea
 
 
-class RUNNER(Tool):
+class dorotheaTool(Tool):
     """
     This is a class for Dorothea Tool module.
     """
