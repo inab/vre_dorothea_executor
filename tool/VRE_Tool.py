@@ -1,45 +1,46 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-"""
-.. See the NOTICE file distributed with this work for additional information
-   regarding copyright ownership.
+# Copyright 2020-2021 Barcelona Supercomputing Center (BSC), Spain
+# Copyright 2020-2021 Heidelberg University Hospital (UKL-HD), Germany
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-"""
 import os
-import shutil
+import subprocess
 import time
+from glob import glob
 
 from basic_modules.tool import Tool
 from utils import logger
-from lib.dorothea import Dorothea
 
 
 class dorotheaTool(Tool):
     """
-    This is a class for Dorothea Tool module.
+    This class define DoRothEA tool.
     """
 
-    MASKED_KEYS = {'execution', 'project', 'description', 'confidence_level', 'minsize', 'method'}  # arguments from config.json
-    R_SCRIPT_PATH = "/home/user/vre_dorothea_executor/lib/run_dorothea.r"
-    TAR_FILENAME = "dorothea_plots.tar.gz"
-    debug_mode = False  # If True debug mode is on, False otherwise
+    DEFAULT_KEYS = ['execution', 'project', 'description']  # config.json default keys
+    R_SCRIPT_PATH = "/dorothea/run_dorothea.R"
 
     def __init__(self, configuration=None):
         """
-        Init function
+        Init function.
+
+        :param configuration: A dictionary containing parameters that define how the operation should be carried out,
+        which are specific to DoRothEA tool.
+        :type configuration: dict
         """
-        logger.debug("VRE Dorothea runner")
         Tool.__init__(self)
 
         if configuration is None:
@@ -47,150 +48,130 @@ class dorotheaTool(Tool):
 
         self.configuration.update(configuration)
 
-        # Arrays are serialized
         for k, v in self.configuration.items():
             if isinstance(v, list):
                 self.configuration[k] = ' '.join(v)
 
-        self.dorothea = Dorothea()
-        self.outputs = dict()
-        self.execution_path = None
-        self.img_path = None
+        # Init variables
+        self.current_dir = os.path.abspath(os.path.dirname(__file__))
+        self.parent_dir = os.path.abspath(self.current_dir + "/../")
+        self.execution_path = self.configuration.get('execution', '.')
+        if not os.path.isabs(self.execution_path):
+            self.execution_path = os.path.normpath(os.path.join(self.parent_dir, self.execution_path))
 
-    def execute_dorothea(self, input_files, arguments):  # pylint: disable=no-self-use
-        """
-        The main function to run the remote Dorothea
-
-        param input_files: List of input files - In this case there are no input files required.
-        :type input_files: dict
-        :param arguments: Dict containing tool arguments
-        :type arguments: dict
-        """
-        try:
-            logger.debug("Getting CSV input file")
-            csv_input_path = input_files["input_reads"]
-
-            if csv_input_path is None:
-                errstr = "CSV input file must be defined"
-                logger.fatal(errstr)
-                raise Exception(errstr)
-
-            print(arguments)
-
-            # Dorothea execution
-            process = self.dorothea.execute_dorothea_rscript(csv_input_path, arguments, self.R_SCRIPT_PATH)
-
-            # Sending the Dorothea execution stdout to the log file
-            for line in iter(process.stderr.readline, b''):
-                print(line.rstrip().decode("utf-8").replace("", " "))
-
-            rc = process.poll()
-            while rc is None:
-                rc = process.poll()
-                time.sleep(0.1)
-
-            if rc is not None and rc != 0:
-                logger.progress("Something went wrong inside the R execution. See logs", status="WARNING")
-
-            else:
-                logger.progress("Dorothea execution finished successfully", status="FINISHED")
-
-        except:
-            errstr = "The Dorothea execution failed. See logs"
-            logger.error(errstr)
-            raise Exception(errstr)
+        self.arguments = dict(
+            [(key, value) for key, value in self.configuration.items() if key not in self.DEFAULT_KEYS]
+        )
 
     def run(self, input_files, input_metadata, output_files, output_metadata):
         """
-        The main function to run the compute_metrics tool.
+        The main function to run the DoRothEA tool.
 
-        :param input_files: List of input files - In this case there are no input files required.
+        :param input_files: Dictionary of input files locations.
         :type input_files: dict
-        :param input_metadata: Matching metadata for each of the files, plus any additional data.
+        :param input_metadata: Dictionary of input files metadata.
         :type input_metadata: dict
-        :param output_files: List of the output files that are to be generated.
+        :param output_files: Dictionary of output files locations expected to be generated.
         :type output_files: dict
-        :param output_metadata: List of matching metadata for the output files
+        :param output_metadata: List of output files metadata expected to be generated.
         :type output_metadata: list
-        :return: List of files with a single entry (output_files), List of matching metadata for the returned files
-        (output_metadata).
+        :return: Generated output files and their metadata.
         :rtype: dict, dict
         """
         try:
-
             # Set and validate execution directory. If not exists the directory will be created.
-            execution_path = os.path.abspath(self.configuration.get('execution', '.'))
-            self.execution_path = execution_path  # save execution path
-            if not os.path.isdir(self.execution_path):
-                os.makedirs(self.execution_path)
+            os.makedirs(self.execution_path, exist_ok=True)
 
             # Set and validate execution parent directory. If not exists the directory will be created.
             execution_parent_dir = os.path.dirname(self.execution_path)
-            if not os.path.isdir(execution_parent_dir):
-                os.makedirs(execution_parent_dir)
+            os.makedirs(execution_parent_dir, exist_ok=True)
 
             # Update working directory to execution path
             os.chdir(self.execution_path)
-            logger.debug("Execution path: {}".format(self.execution_path))
 
-            logger.debug("Dorothea execution")
-            self.execute_dorothea(input_files, self.configuration)
+            # Tool execution
+            self.toolExecution(input_files)
 
-            # TAR output images from dorothea execution
-            # self.img_path = self.execution_path + "/img/"
-            # if os.path.isdir(self.img_path) and len(os.listdir(self.img_path)) != 0:
-            #     # if img folder exists and is not empty
-            #     logger.debug("TAR Dorothea images")
-            #     self.dorothea.tar_result(self.img_path, self.TAR_FILENAME)
-            #     shutil.rmtree(self.img_path)  # remove image folder
-            #
-            # else:
-            #     errstr = "Image folder is not created or is empty"
-            #     logger.fatal(errstr)
-            #     raise Exception(errstr)
+            # Create and validate the output file from tool execution
+            output_id = output_metadata[0]["name"]
+            output_type = output_metadata[0]["file"]["file_type"].lower()
+            output_file_path = glob(self.execution_path + "/*." + output_type)[0]
+            if os.path.isfile(output_file_path):
+                output_files[output_id] = [(output_file_path, "file")]
 
-            # Create and validate the output files
-            self.create_output_files(output_files, output_metadata)
-            logger.debug("Output files and output metadata created")
+                return output_files, output_metadata
 
-            return output_files, output_metadata
+            else:
+                errstr = "Output file {} not created. See logs.".format(output_file_path)
+                logger.fatal(errstr)
+                raise Exception(errstr)
 
         except:
-            errstr = "VRE Dorothea RUNNER pipeline failed. See logs"
+            errstr = "DoRothEA tool execution failed. See logs."
             logger.fatal(errstr)
             raise Exception(errstr)
 
-    def create_output_files(self, output_files, output_metadata):
+    def toolExecution(self, input_files):
         """
-        Create output files list
+        The main function to run the DoRothEA tool.
 
-        :param output_files: List of the output files that are to be generated.
-        :type output_files: dict
-        :param output_metadata: List of matching metadata for the output files
-        :type output_metadata: list
-        :return: List of files with a single entry (output_files), List of matching metadata for the returned files
-        (output_metadata).
-        :rtype: dict, dict
+        :param input_files: Dictionary of input files locations.
+        :type input_files: dict
         """
+        rc = None
+
         try:
-            confidence_level = self.configuration.get('confidence_level', '.')
+            # Get input file
+            expression_matrix = input_files.get("expression_matrix")
+            if not os.path.isabs(expression_matrix):
+                expression_matrix = os.path.normpath(os.path.join(self.parent_dir, expression_matrix))
 
-            for metadata in output_metadata:  # for each output file in output_metadata
-                out_id = metadata["name"]
-                pop_output_path = list()  # list of tuples (path, type of output)
-                if out_id in output_files.keys():
-                    if out_id == "dorothea_scores":
-                        file_path = self.execution_path + "/" + out_id + "_" + \
-                                    confidence_level.replace(' ', '') + ".csv"
-                    else:
-                        file_path = self.execution_path + "/" + self.TAR_FILENAME
+            # Get arguments
+            confidence_level = self.arguments.get("confidence_level")
+            minsize = self.arguments.get("minsize")
+            method = self.arguments.get("method")
+            if confidence_level is None or minsize is None or method is None:
+                errstr = "confidence level, minimum size and method arguments must be defined."
+                logger.fatal(errstr)
+                raise Exception(errstr)
 
-                    pop_output_path.append((file_path, "file"))  # add file_path and file_type
+            # Rscript execution
+            if os.path.isfile(expression_matrix):
 
-                    output_files[out_id] = pop_output_path  # create output files
-                    self.outputs[out_id] = pop_output_path  # save output files
+                cmd = [
+                    'Rscript',
+                    '--vanilla',
+                    self.parent_dir + self.R_SCRIPT_PATH,
+                    expression_matrix,
+                    confidence_level,
+                    str(minsize),
+                    method
+                ]
+
+                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+                # Sending the stdout to the log file
+                for line in iter(process.stderr.readline, b''):
+                    print(line.rstrip().decode("utf-8").replace("", " "))
+
+                rc = process.poll()
+                while rc is None:
+                    rc = process.poll()
+                    time.sleep(0.1)
+
+                if rc is not None and rc != 0:
+                    logger.progress("Something went wrong inside the Rscript execution. See logs", status="WARNING")
+                else:
+                    logger.progress("Rscript execution finished successfully", status="FINISHED")
+
+            else:
+                errstr = "expression_matrix input file must be defined."
+                logger.fatal(errstr)
+                raise Exception(errstr)
 
         except:
-            errstr = "Output files not created. See logs"
-            logger.fatal(errstr)
+            errstr = "Rscript execution failed. See logs."
+            logger.error(errstr)
+            if rc is not None:
+                logger.error("RETVAL: {}".format(rc))
             raise Exception(errstr)

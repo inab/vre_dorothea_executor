@@ -1,7 +1,7 @@
 {
     "input_files": [
         {
-            "name": "input_reads",
+            "name": "expression_matrix",
             "value": "unique_file_id_5f0d9cada30326.2860077",
             "required": true,
             "allow_multiple": false
@@ -10,10 +10,14 @@
     "arguments": [
         {
             "name": "execution",
-            "value": "/home/user/vre_dorothea_executor/tests/basic/run000"
+            "value": "tests/basic/run000"
         },
         {
             "name": "project",
+            "value": "DoRothEA"
+        },
+        {
+            "name": "description",
             "value": "test"
         },
         {
@@ -43,7 +47,7 @@
                 "data_type": "dorothea_scores",
                 "meta_data": {
                     "visible": true,
-                    "description": "Normalized enrichment scores for Transciption Factors"
+                    "description": "Normalized enrichment scores for Transcription Factors"
                 }
             }
         }

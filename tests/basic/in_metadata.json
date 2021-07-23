@@ -1,7 +1,8 @@
 [
     {
         "_id": "unique_file_id_5f0d9cada30326.2860077",
-        "file_path": "/home/user/vre_dorothea_executor/tests/basic/data/data_test.csv",
+        "type": "file",
+        "file_path": "dorothea/data/dorothea_example.csv",
         "file_type": "CSV",
         "data_type": "expression_profile",
         "compressed": 0,
@@ -12,11 +13,9 @@
                 "$numberLong": "1594727597000"
             }
         },
-        "taxon_id": 0,
         "meta_data": {
-            "type": "file",
             "size": 0,
-            "project": "my_project_id",
+            "project": "DoRothEA",
             "atime": {
                 "$date": {
                     "$numberLong": "1594727597000"
