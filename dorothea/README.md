@@ -2,6 +2,8 @@
 
 # DoRothEA: Discriminant Regulon Expression Analysis 
 
+<br />
+
 <!-- badges: start -->
 ![GitHub](https://img.shields.io/github/license/saezlab/dorothea)
 <!-- badges: end -->
