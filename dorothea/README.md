@@ -1,8 +1,6 @@
 <img src="https://github.com/saezlab/dorothea/raw/master/man/figures/tool_logo.png" align="left" height="100">
 
-# DoRothEA 
-
-<br />
+# DoRothEA: Discriminant Regulon Expression Analysis 
 
 <!-- badges: start -->
 ![GitHub](https://img.shields.io/github/license/saezlab/dorothea)

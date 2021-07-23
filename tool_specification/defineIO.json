@@ -2,9 +2,9 @@
     "_id": "dorothea",
     "input_files": [
         {
-            "name": "input_reads",
-            "description": "Gene expression matrix with genes (HGNC\/MGI symbols) in rows and samples in columns.",
-            "help": "The object can be a simple matrix\/data frame or complexer objects such as ExpressionSet Seurat or SingleCellExperiment objects.",
+            "name": "expression_matrix",
+            "description": "Gene expression matrix with genes (HGNC\/MGI symbols) in rows and samples in columns",
+            "help": "The object can be a simple matrix\/data frame or complexer objects such as ExpressionSet Seurat or SingleCellExperiment objects",
             "file_type": [
                 "CSV"
             ],
@@ -18,17 +18,17 @@
     "input_files_public_dir": [],
     "input_files_combinations": [
         {
-            "description": "Analyse gene expression matrix",
+            "description": "Run DoRothEA pipeline",
             "input_files": [
-                "input_reads"
+                "expression_matrix"
             ]
         }
     ],
     "arguments": [
         {
             "name": "confidence_level",
-            "description": "Confidence level based on the number of supporting evidence.",
-            "help": "The confidence assigment comprises five levels, ranging from A (highest confidence) to E (lowest confidence).",
+            "description": "Confidence level based on the number of supporting evidence",
+            "help": "The confidence assigment comprises five levels, ranging from A (highest confidence) to E (lowest confidence)",
             "type": "enum_multiple",
             "enum_items": {
                 "description": [
@@ -52,8 +52,8 @@
         },
         {
             "name": "minsize",
-            "description": "Minimal number of genes in regulons.",
-            "help": "Number of genes targeted by a specific transcription factor.",
+            "description": "Minimal number of genes in regulons",
+            "help": "Number of genes targeted by a specific transcription factor",
             "type": "integer",
             "default": 5
         },
