@@ -79,10 +79,10 @@ class dorotheaTool(Tool):
         :rtype: dict, dict
         """
         try:
-            # Set and validate execution directory. If not exists the directory will be created.
+            # Set and validate execution directory. If not exists the directory will be created
             os.makedirs(self.execution_path, exist_ok=True)
 
-            # Set and validate execution parent directory. If not exists the directory will be created.
+            # Set and validate execution parent directory. If not exists the directory will be created
             execution_parent_dir = os.path.dirname(self.execution_path)
             os.makedirs(execution_parent_dir, exist_ok=True)
 
