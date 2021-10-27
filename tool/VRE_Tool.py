@@ -30,7 +30,7 @@ class dorotheaTool(Tool):
     This class define DoRothEA tool.
     """
 
-    DEFAULT_KEYS = ['execution', 'project', 'description']  # config.json default keys
+    DEFAULT_KEYS = ['execution', 'project', 'description']
     R_SCRIPT_PATH = "/dorothea/run_dorothea.R"
 
     def __init__(self, configuration=None):
@@ -38,7 +38,7 @@ class dorotheaTool(Tool):
         Init function.
 
         :param configuration: A dictionary containing parameters that define how the operation should be carried out,
-        which are specific to DoRothEA tool.
+            which are specific to DoRothEA tool.
         :type configuration: dict
         """
         Tool.__init__(self)
@@ -93,8 +93,8 @@ class dorotheaTool(Tool):
             self.toolExecution(input_files)
 
             # Create and validate the output file from tool execution
-            output_id = output_metadata[0]["name"]
-            output_type = output_metadata[0]["file"]["file_type"].lower()
+            output_id = output_metadata[0]['name']
+            output_type = output_metadata[0]['file']['file_type'].lower()
             output_file_path = glob(self.execution_path + "/*." + output_type)[0]
             if os.path.isfile(output_file_path):
                 output_files[output_id] = [(output_file_path, "file")]
@@ -122,14 +122,14 @@ class dorotheaTool(Tool):
 
         try:
             # Get input file
-            expression_matrix = input_files.get("expression_matrix")
+            expression_matrix = input_files.get('expression_matrix')
             if not os.path.isabs(expression_matrix):
                 expression_matrix = os.path.normpath(os.path.join(self.parent_dir, expression_matrix))
 
             # Get arguments
-            confidence_level = self.arguments.get("confidence_level")
-            minsize = self.arguments.get("minsize")
-            method = self.arguments.get("method")
+            confidence_level = self.arguments.get('confidence_level')
+            minsize = self.arguments.get('minsize')
+            method = self.arguments.get('method')
             if confidence_level is None or minsize is None or method is None:
                 errstr = "confidence level, minimum size and method arguments must be defined."
                 logger.fatal(errstr)
